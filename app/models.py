@@ -1,4 +1,6 @@
-from . import db
+from flask_sqlalchemy import SQLAlchemy
+
+db = SQLAlchemy()
 
 
 class Customer(db.Model):
@@ -8,11 +10,3 @@ class Customer(db.Model):
     name = db.Column(db.String(), nullable=False)
     sector = db.Column(db.String(), nullable=False)
     website = db.Column(db.String())
-
-    def serialize(self):
-        return {
-            'id': self.id,
-            'name': self.name,
-            'sector': self.sector,
-            'website': self.website
-        }
