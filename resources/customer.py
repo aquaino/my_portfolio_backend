@@ -1,5 +1,6 @@
-from flask_restful import Resource, fields, marshal_with
+from flask_restful import Resource, fields, marshal_with, marshal
 from app.models import Customer as CustomerModel
+from flask import Response
 
 customer_fields = {
     'id': fields.Integer,
@@ -10,14 +11,18 @@ customer_fields = {
 
 
 class Customer(Resource):
-    @marshal_with(customer_fields)
     def get(self, id):
         customer = CustomerModel.query.filter_by(id=id).first()
-        return customer
+        if customer:
+            return marshal(customer, customer_fields), 200
+        else:
+            return None, 200
 
 
 class CustomerList(Resource):
-    @marshal_with(customer_fields, envelope='customers')
     def get(self):
         customers = CustomerModel.query.all()
-        return customers
+        if customers:
+            return marshal(customers, customer_fields), 200
+        else:
+            return [], 200
